@@ -1,0 +1,118 @@
+{
+	"info": {
+		"_postman_id": "d2304520-c4fb-4cdf-a8b4-d6c7d82c4864",
+		"name": "FSE Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30258040"
+	},
+	"item": [
+		{
+			"name": "GET localhost:8082/tourism/api/v1/branch",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8082/tourism/api/v1/branch",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tourism",
+						"api",
+						"v1",
+						"branch"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST localhost:8082/tourism/api/v1/branch/add-places",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"branchName\": \"Cognizant SRC\",\n    \"place\": \"ANDAMAN\",\n    \"website\": \"www.example.com\",\n    \"contact\": \"1234567890\",\n    \"email\": \"example@example.com\",\n    \"touristPlaces\": [\n        {\n            \"name\": \"ANDAMAN\",\n            \"tariff\": 50000.0\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/tourism/api/v1/branch/add-places",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tourism",
+						"api",
+						"v1",
+						"branch",
+						"add-places"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT localhost:8082/tourism/api/v1/branch/update-tariff",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"branchName\": \"Cognizant CKC\",\n    \"place\": \"ANDAMAN\",\n    \"website\": \"www.example.com\",\n    \"contact\": \"1234567899\",\n    \"email\": \"example@example.com\",\n    \"andamanTariff\": 75000.0,\n    \"thailandTariff\": 80000.0,\n    \"dubaiTariff\": 50001.0,\n    \"singaporeTariff\": 90000.0,\n    \"malaysiaTariff\": 65000.0,\n    \"createdAt\": \"2023-10-21T12:56:01.747244\",\n    \"updatedAt\": null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8082/tourism/api/v1/branch/update-tariff/1",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"tourism",
+						"api",
+						"v1",
+						"branch",
+						"update-tariff",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET localhost:8082/tourism/api/v1/branch Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8083/tourism/api/v1/branch/admin/branchName/Cognizant SRC",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"tourism",
+						"api",
+						"v1",
+						"branch",
+						"admin",
+						"branchName",
+						"Cognizant SRC"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
