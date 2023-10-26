@@ -1,0 +1,93 @@
+<div class="container mt-4 py-4">
+  <div>
+    <h2 class="py-4">Admin Search</h2>
+    <label for="criteria">Search Criteria:</label>
+    <div class="row">
+      <div class="col-md-6">
+        <select
+          id="criteria"
+          class="form-select"
+          [(ngModel)]="selectedCriteria"
+          (ngModelChange)="updatePlaceholder()"
+        >
+          <option value="branchId">Branch ID</option>
+          <option value="branchName">Branch Name</option>
+          <option value="places">Places</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <!-- Conditionally show the dropdown for places based on the selected criteria -->
+        <select
+          *ngIf="selectedCriteria === 'places'"
+          class="form-select"
+          id="criteriaValue"
+          [(ngModel)]="searchValue"
+        >
+          <option value="ANDAMAN">ANDAMAN</option>
+          <option value="THAILAND">THAILAND</option>
+          <option value="DUBAI">DUBAI</option>
+          <option value="SINGAPORE">SINGAPORE</option>
+          <option value="MALAYSIA">MALAYSIA</option>
+        </select>
+
+        <input
+          [placeholder]="placeholderText"
+          *ngIf="selectedCriteria === 'branchId'"
+          type="number"
+          class="form-control"
+          [(ngModel)]="searchValue"
+        />
+        <input
+          [placeholder]="placeholderText"
+          *ngIf="selectedCriteria === 'branchName'"
+          type="text"
+          class="form-control"
+          [(ngModel)]="searchValue"
+        />
+      </div>
+    </div>
+    <button class="btn btn-primary my-2 col-md-2" (click)="search()">
+      Search
+    </button>
+  </div>
+  <div *ngIf="isSearchValueEmpty" class="alert alert-danger">
+    The search field cannot be empty.
+  </div>
+  <div *ngIf="isError" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="searchResults">
+    <h3>Search Results</h3>
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Branch</th>
+          <th>Contact</th>
+          <th>Email</th>
+          <th>Website</th>
+          <th>Places</th>
+          <th>Tariff Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let result of searchResults">
+          <td>{{ result.branchName }}</td>
+          <td>{{ result.contact }}</td>
+          <td>{{ result.email }}</td>
+          <td>{{ result.website }}</td>
+          <td>
+            <tr *ngFor="let place of result.touristPlaces; let last = last">
+              <td>{{ place.name }}</td>
+            </tr>
+          </td>
+          <td>
+            <tr *ngFor="let place of result.touristPlaces; let last = last">
+              <td>{{ place.tariff }}</td>
+            </tr>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
