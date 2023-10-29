@@ -22,7 +22,19 @@ az sql server create --name $server --resource-group $resourceGroup --location "
 echo "Configuring firewall..."
 az sql server firewall-rule create --resource-group $resourceGroup --server $server -n AllowYourIp --start-ip-address $startIp --end-ip-address $endIp
 echo "Creating $database on $server..."
-az sql db create --resource-group $resourceGroup --server $server --name $database --sample-name AdventureWorksLT --edition GeneralPurpose --family Gen5 --capacity 2 --zone-redundant true # zone redundancy is only supported on premium and business critical service tiers
+az sql db create --resource-group $resourceGroup --server $server --name $database --sample-name AdventureWorksLT --edition GeneralPurpose --family Gen5 --capacity 2 --zone-redundant true 
+
+cat << EOF > create_user.sql
+USE yuvafsedb;
+GO
+CREATE USER yuvafseuser WITH PASSWORD='yuvaFse_pa$$w0rd';
+GO
+GRANT CONTROL ON DATABASE::yuvafsedb TO yuvafseuser;
+GO
+EOF
+
+sqlcmd -S yuva-fse-sql-server.database.windows.net,1433 -d yuvafsedb -U azureuser -P Pa$$w0rD-Yuva-F$E -i create_user.sql
+
 
 account="yuva-fse-cosmos-account" #needs to be lower case
 database="yuva-fse-mongo-cosmos-db"
@@ -52,7 +64,7 @@ printf '
 ]' > idxpolicy-$randomIdentifier.json
 
 # Create a MongoDB API collection
-echo "Creating $collection1"
+echo "Creating $collection"
 az cosmosdb mongodb collection create --account-name $account --resource-group $resourceGroup --database-name $database --name $collection --shard "user_id" --throughput 400 --idx @idxpolicy-$randomIdentifier.json
 
 # Clean up temporary index policy file
@@ -68,8 +80,8 @@ az servicebus namespace authorization-rule keys list --resource-group $resourceG
 # Create an App Service app with deployment from GitHub
 # set -e # exit if error
 # Variable block
-touristmanagementappGitRepo=https://github.com/yuva2g/tourist-management-application/tree/master/tourist-management-service/tourist-management-app # Replace the following URL with your own public GitHub repo URL if you have one
-touristmanagementqueryappGitRepo=https://github.com/yuva2g/tourist-management-application/tree/master/tourist-management-service/tourist-management-query-app # Replace the following URL with your own public GitHub repo URL if you have one
+touristmanagementappGitRepo=https://github.com/yuva2g/tourist-management-app.git
+touristmanagementqueryappGitRepo=https://github.com/yuva2g/tourist-management-query-app.git 
 appServicePlan="yuva-fse-service-plan"
 touristManagementApp="yuva-tourist-management-app"
 touristManagementQueryApp="yuva-tourist-management-query-app"
@@ -80,29 +92,27 @@ az appservice plan create --name $appServicePlan --resource-group $resourceGroup
 
 # Create a web app.
 echo "Creating $touristManagementApp"
-az touristManagementApp create --name $touristManagementApp --resource-group $resourceGroup --plan $appServicePlan
+az webapp create --name $touristManagementApp --resource-group $resourceGroup --plan $appServicePlan
 
 # Deploy code from a public GitHub repository.
-az touristManagementApp deployment source config --name $touristManagementApp --resource-group $resourceGroup --repo-url $gitrepo --branch master --manual-integration
+az webapp deployment source config --name $touristManagementApp --resource-group $resourceGroup --repo-url $touristmanagementappGitRepo --branch master --manual-integration
 
 # Use curl to see the web app.
 site="http://$touristManagementApp.azurewebsites.net"
 echo $site
-curl "$site" # Optionally, copy and paste the output of the previous command into a browser to see the web app
+curl "$site" 
 
 # Create a web app.
 echo "Creating $touristManagementQueryApp"
-az touristManagementQueryApp create --name $touristManagementQueryApp --resource-group $resourceGroup --plan $appServicePlan
+az webapp create --name $touristManagementQueryApp --resource-group $resourceGroup --plan $appServicePlan
 
 # Deploy code from a public GitHub repository.
-az touristManagementQueryApp deployment source config --name $touristManagementQueryApp --resource-group $resourceGroup --repo-url $gitrepo --branch master --manual-integration
+az webapp deployment source config --name $touristManagementQueryApp --resource-group $resourceGroup --repo-url $touristmanagementqueryappGitRepo --branch master --manual-integration
 
 # Use curl to see the web app.
 site="http://$touristManagementQueryApp.azurewebsites.net"
 echo $site
-curl "$site" # Optionally, copy and paste the output of the previous command into a browser to see the web app
+curl "$site" 
 
-
-
-
-
+# Create a Azure Web App - Angular app
+# Follow the instructions on the website: https://henriquesd.medium.com/deploying-an-angular-application-in-azure-9f89edfe2b9c

@@ -9,7 +9,7 @@ export class TouristService {
   constructor(private http: HttpClient) {}
 
   search(selectedCriteria: string, searchValue: string): any {
-    return this.http.get(`http://localhost:8083/tourism/api/v1/branch/admin/${selectedCriteria}/${searchValue}`);
+    return this.http.get(`https://yuva-tourist-management-query-app.azurewebsites.net/tourism/api/v1/branch/admin/${selectedCriteria}/${searchValue}`);
 
   //   return of([
   //     {

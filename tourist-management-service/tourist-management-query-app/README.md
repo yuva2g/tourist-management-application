@@ -1,0 +1,1 @@
+### For Code useful for Azure deployment, follow this git repo https://github.com/yuva2g/tourist-management-app 
