@@ -1,12 +1,10 @@
 package com.cognizant.fse.assignment.touristmanagementapp.service;
 
 import com.cognizant.fse.assignment.touristmanagementapp.domain.TouristCompany;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.support.SendResult;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.concurrent.ExecutionException;
 
@@ -14,24 +12,20 @@ import java.util.concurrent.ExecutionException;
  * MessageProducerService class should be used to send messages to Kafka Topic
  */
 @Service
+@RequiredArgsConstructor
 public class MessageProducerService {
 
-    @Value("${kafka.topic-name}")
-    private String topic;
+    private static final String QUEUE_NAME = "yuva-fse-service-bus-queue";
 
     /**
      * Inject a bean of KafkaTemplate created in KafkaConfig class
      *
      */
-    KafkaTemplate<String, TouristCompany> kafkaTemplate;
 
     @Autowired
-    public MessageProducerService(KafkaTemplate<String, TouristCompany> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    private final JmsTemplate jmsTemplate;
 
-    public TouristCompany sendOrderMessage(TouristCompany orderDto) throws ExecutionException, InterruptedException {
-        ListenableFuture<SendResult<String, TouristCompany>> result = kafkaTemplate.send(topic, orderDto);
-        return result.get().getProducerRecord().value();
+    public void sendOrderMessage(TouristCompany touristCompany) throws ExecutionException, InterruptedException {
+        jmsTemplate.convertAndSend(QUEUE_NAME, touristCompany);
     }
 }

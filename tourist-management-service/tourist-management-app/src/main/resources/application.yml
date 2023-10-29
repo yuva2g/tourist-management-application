@@ -2,7 +2,7 @@ spring:
   application:
     name: tourist-management-app
   datasource:
-    url: ${DATABASE_URL}
+    url: jdbc:sqlserver://yuva-fse-sql-server.database.windows.net:1433;database=yuvafsedb;user=azureuser@yuva-fse-sql-server;password=Pa$$w0rD-Yuva-F$E;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
     username: azureuser
     password: Pa$$w0rD-Yuva-F$E
   # Hibernate settings
@@ -13,7 +13,7 @@ spring:
     database-platform: org.hibernate.dialect.SQLServer2016Dialect
   jms:
     servicebus:
-      connection-string: ${SERVICE_BUS_CONNECTION_STRING}
+      connection-string: Endpoint=sb://yuva-fse-service-bus-namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=DRhwlHiX2uTqIx/PlJBcTxvr9WmaKv+2j+ASbCy44HE=
       pricing-tier: basic
 logging:
   level:

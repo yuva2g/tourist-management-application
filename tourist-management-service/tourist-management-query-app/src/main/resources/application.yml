@@ -7,7 +7,7 @@ spring:
     name: tourist-management-query-app
   jms:
     servicebus:
-      connection-string: ${SERVICEBUS_NAMESPACE_CONNECTION_STRING}
+      connection-string: Endpoint=sb://yuva-fse-service-bus-namespace.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=DRhwlHiX2uTqIx/PlJBcTxvr9WmaKv+2j+ASbCy44HE=
       pricing-tier: basic
       receive-timeout: 50000
 logging:
