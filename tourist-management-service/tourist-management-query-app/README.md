@@ -1,1 +1,1 @@
-### For Code useful for Azure deployment, follow this git repo https://github.com/yuva2g/tourist-management-app 
+### Code for Azure deployment is available in git repo https://github.com/yuva2g/tourist-management-query-app 
